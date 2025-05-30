@@ -20,6 +20,10 @@ We're developing a food delivery management system named **"Yummy!"**, focusing 
 - **Backend**: Node.js, Express.js  
 - **Database**: PostgreSQL  
 - **Version Control**: Git & GitHub
+- **Image Storage**: Cloudinary
+- **Database Online Hosting**: Neon
+- **Backend Deployment**: Render
+- **Frontend Deployment**: Vercel
 
 ---
 
