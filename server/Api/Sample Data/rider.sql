@@ -1,0 +1,2 @@
+INSERT INTO "rider" ("rider_id", "curr_sub_dist", "email", "rider_details", "photo_url") VALUES ('hmahee', '1', 'mahee123@gmail.com', 'I like ac.', 'http://res.cloudinary.com/dvm1qpuvn/image/upload/v1749141128/Rider_Photos/jzapm36ktamf9ljqr1a2.jpg');
+INSERT INTO "rider" ("rider_id", "curr_sub_dist", "email", "rider_details", "photo_url") VALUES ('samimhb', '1', 'samimahbub123@gmail.com', 'I like anime cosplay.', 'http://res.cloudinary.com/dvm1qpuvn/image/upload/v1749141358/Rider_Photos/ingeq1ejt0nl7jxfwx7l.jpg');

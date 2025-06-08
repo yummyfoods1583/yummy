@@ -1,0 +1,12 @@
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('admin123', 'ADM', 'Yummy Admin', '123Admin', '111111111111111');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('ruhan-ruhan', 'CUS', 'Ruhan', '2205043R', '011111111111');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('shoyaib', 'CUS', 'Md. Shoyaib Rezwan', '2205014MSR', '01775899614');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('tokysami', 'CUS', 'Toky Tahmid Sami', '2205020TTS', '01755678109');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('hmahee', 'RID', 'Hasan Mahee', '2205015HFM', '01764245637');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('samimhb', 'RID', 'Sami Mahbub', '2205024SM', '01717713953');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('the-cuisine-hub', 'RES', 'The Cusine Hub', '1234567TCH', '99999999999');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('segreto', 'RES', 'Segreto', '1234567S', '99999999999');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('sugar-crush-and-co', 'RES', 'Sugar Crush And CO', '1234567SCAC', '99999999999');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('the-nest', 'RES', 'The Nest', '1234567TH', '99999999999');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('seasons-restaurant-and-cafe', 'RES', 'SEASONS Restaurant & Café', '1234567SRAC', '99999999999');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('the-tehari-ghar-banani', 'RES', 'The Tehari Ghar Banai', '1234567TTGB', '99999999999');

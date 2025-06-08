@@ -1,0 +1,26 @@
+# GET http://localhost:3000/api/v1/districts
+
+# post http://localhost:3000/api/v1/login 
+# Content-Type: application/json
+
+# {
+#     "user_id":"admin123",
+#     "password": "123Admin"
+# }
+
+# GET http://localhost:3000/api/v1/subdistricts/Dhaka
+
+# POST http://localhost:3000/api/v1/rider
+# Content-Type: application/json
+
+# {
+#         "user_id": "ruhan-ruhan1",
+#         "password": "2205043R",
+#         "name":"Ruhan",
+#         "mobile": "01111111111",
+#         "email": "ruhan43@gmail.com",
+#         "photo_url":"http://google.com",
+#         "details":"ruhan43@gmail.com",
+#         "curr_sub_dist_id":1
+# }
+GET http://localhost:3000/api/v1/restaurants?rating_order=ASC&name=ne&
