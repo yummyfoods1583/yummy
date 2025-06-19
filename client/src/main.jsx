@@ -9,7 +9,6 @@ import Homepage from "./routes/Homepage.jsx"
 import Districts from "./routes/Districts.jsx"
 import YummyContextProvider from "./contexts/YummyContextProvider.jsx"
 import Login from "./routes/Login.jsx"
-import Admin from "./routes/Admin.jsx"
 import Register from "./routes/Register.jsx"
 import Restaurants from "./routes/Restaurants.jsx"
 
@@ -31,12 +30,8 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/:user_type/:user_id",
-    element: <Admin />,
-  },
-  {
     path: "/restaurants",
-    element: <Restaurants/>,
+    element: <Restaurants />,
   },
 ])
 

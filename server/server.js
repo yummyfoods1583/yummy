@@ -3,12 +3,24 @@ const express = require("express")
 require("dotenv").config()
 const db = require("./Api")
 const cors = require("cors")
+const jwt = require("jsonwebtoken")
+const cookieParser = require("cookie-parser")
+const authorizeJWT =require("./authorize.js")
 
 //variables
 const app = express()
 
+//middlewares
+
+//parse cookies
+app.use(cookieParser())
 //bypass the cross origin resource sharing protocols
-app.use(cors())
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true, //enable to sent cookies
+  })
+)
 //middleware to parse JSON content
 app.use(express.json())
 
@@ -24,20 +36,73 @@ app.get("/api/v1/districts", async (req, res) => {
   })
 })
 
-//fetch login data
+//create token for login
 app.post("/api/v1/login", async (req, res) => {
-  const result = await db.query(
-    "SELECT USER_ID, USER_TYPE FROM USERS WHERE USER_ID= $1 AND PASSWORD=$2",
-    [req.body.user_id, req.body.password]
-  )
+  try {
+    const { user_id, password } = req.body
+    const result = await db.query(
+      "SELECT USER_ID, USER_TYPE FROM USERS WHERE USER_ID= $1 AND PASSWORD=$2",
+      [user_id, password]
+    )
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({
+        status: "fail",
+        message: "Invalid credentials",
+      })
+    }
+
+    const user = result.rows[0]
+
+    // Create token
+    const token = jwt.sign(
+      {
+        user_id: user.user_id,
+        user_type: user.user_type,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    )
+
+    // Setting secure HTTP-only cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Strict",
+      maxAge: 60 * 60 * 1000,
+    })
+    //sending response
+    res.status(200).json({
+      status: "success",
+      message: "Login successfull!!",
+      data: {
+        user: result.rows[0],
+      },
+    })
+  } catch (err) {
+    console.error("Login error:", err)
+    res.status(500).json({
+      status: "error",
+      message: "Internal server error",
+    })
+  }
+})
+
+//handle logout
+app.post("/api/v1/logout", (req, res) => {
+  // Clear the 'token' cookie
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false, // should be true in production with HTTPS
+    sameSite: "Strict",
+  })
+
   res.status(200).json({
     status: "success",
-    data_length: result.rows.length,
-    data: {
-      user: result.rows[0],
-    },
+    message: "Logged out successfully!",
   })
 })
+
 
 //fetch the subdistricts
 app.get("/api/v1/subdistricts/:id", async (req, res) => {
@@ -164,6 +229,32 @@ ORDER BY R1.RATING ${rating_order}`,
       status: "error",
       message: "internal server error",
     })
+  }
+})
+
+//fetch admin data
+app.get("/api/v1/ADM/:id", authorizeJWT, async (req, res) => {
+  try {
+    const admin_id = req.params.id
+
+    // Fetch admin data from DB (modify table/columns as needed)
+    const result = await db.query("SELECT * FROM ADMIN WHERE ADMIN_ID = $1", [
+      admin_id,
+    ])
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Admin not found" })
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        user: result.rows[0],
+      },
+    })
+  } catch (err) {
+    console.error("Admin fetch error:", err)
+    res.status(500).json({ message: "Internal server error" })
   }
 })
 

@@ -6,9 +6,12 @@ import YummyDataFetch from "../Api/YummyDataFetch"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "react-router-dom"
-import { YummyContext } from "../contexts/YummyContextProvider"
+import YummyContextProvider, {
+  YummyContext,
+} from "../contexts/YummyContextProvider"
 
 const Homepage = () => {
+
   //fetch all the districts
   const { districts, setDistricts } = useContext(YummyContext)
   useEffect(() => {

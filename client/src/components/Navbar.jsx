@@ -1,8 +1,19 @@
-import React from "react"
+import React, { useContext,useEffect } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
 import { NavLink, Link } from "react-router-dom"
+import UserDropdown from "./UserDropdown"
+import { YummyContext } from "../contexts/YummyContextProvider"
 
 const Navbar = () => {
+  //check whether there is a logged in user
+  const { current_user, setCurrentUser } = useContext(YummyContext)
+  useEffect(() => {
+    const logged_user = JSON.parse(localStorage.getItem("yummy_user"))
+    // console.log(logged_user)
+    if (logged_user) {
+      setCurrentUser(logged_user)
+    }
+  }, [])
   return (
     <>
       <div className="container-fluid shadow position-sticky top-0 z-3 bg-white bg-gradient">
@@ -47,20 +58,25 @@ const Navbar = () => {
             </li>
           </ul>
           <div className="col-md-3 text-end d-flex justify-content-center gap-3">
-            <Link
-              to="/register"
-              type="button"
-              className="btn btn-outline-success me-2 rounded-pill p-2 fs-6"
-            >
-              Register
-            </Link>
-            <Link
-              to="/login"
-              type="button"
-              className="btn btn-outline-primary rounded-pill p-2 px-3 fs-6"
-            >
-              Login
-            </Link>
+            {current_user === null && (
+              <>
+                <Link
+                  to="/register"
+                  type="button"
+                  className="btn btn-outline-success me-2 rounded-pill p-2 fs-6"
+                >
+                  Register
+                </Link>
+                <Link
+                  to="/login"
+                  type="button"
+                  className="btn btn-outline-primary rounded-pill p-2 px-3 fs-6"
+                >
+                  Login
+                </Link>
+              </>
+            )}
+            {current_user && <UserDropdown />}
           </div>
         </header>
       </div>

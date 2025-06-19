@@ -16,18 +16,23 @@ const loginForm = () => {
 
   //handler functions
   const onSubmit = async (data) => {
-    const respond = await YummyDataFetch.post("/login", {
-      user_id: data.username,
-      password: data.password,
-    })
-    if (respond.data.data_length == 0) {
-      alert("Wrong credentials!! Please try again!!")
-    } else {
-      console.log(respond.data.data.user)
-      localStorage.setItem("user", JSON.stringify(respond.data.data.user))
-      navigate(
-        `/${respond.data.data.user.user_type}/${respond.data.data.user.user_id}`
+    try {
+      const respond = await YummyDataFetch.post("/login", {
+        user_id: data.username,
+        password: data.password,
+      })
+      alert("Login successful")
+      localStorage.setItem(
+        "yummy_user",
+        JSON.stringify({
+          user_id: respond.data.data.user.user_id,
+          user_type: respond.data.data.user.user_type,
+        })
       )
+      navigate(`/`)
+    } catch (error) {
+      const message = error.response?.data.message || error.message
+      alert(message)
     }
   }
 

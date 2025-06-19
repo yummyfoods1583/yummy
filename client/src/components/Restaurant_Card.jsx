@@ -59,7 +59,7 @@ const Restaurant_Card = ({ restaurant }) => {
           )}
 
         {/*Display Close Until*/}
-        {close_until !== null && (
+        {close_until !== null && close_until > new Date() && (
           <div
             className="Container-fluid bg-black position-absolute bg-opacity-75 d-flex justify-content-center align-items-center fw-bold fs-5"
             style={{ width: "400px", height: "225px" }}
@@ -82,13 +82,4 @@ const Restaurant_Card = ({ restaurant }) => {
 }
 
 export default Restaurant_Card
-// {
-//   close_until !== null && (
-//     <span className="text-white">
-//       Close Until:{"\t"}
-//       {close_until.getDate()}-{close_until.getMonth()}-
-//       {close_until.getFullYear()}
-//       {"\t"}
-//     </span>
-//   )
-// }
+

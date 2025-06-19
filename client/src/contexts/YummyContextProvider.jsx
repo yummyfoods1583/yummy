@@ -5,7 +5,8 @@ export const YummyContext = createContext()
 
 const YummyContextProvider = ({ children }) => {
   const [districts, setDistricts] = useState([])
-  const [currentDistrict, setCurrentDistrict]=useState("")
+  const [currentDistrict, setCurrentDistrict] = useState("")
+  const [current_user, setCurrentUser] = useState(null)
 
   return (
     <YummyContext.Provider
@@ -13,7 +14,9 @@ const YummyContextProvider = ({ children }) => {
         districts,
         setDistricts,
         currentDistrict,
-        setCurrentDistrict
+        setCurrentDistrict,
+        current_user,
+        setCurrentUser,
       }}
     >
       {children}
