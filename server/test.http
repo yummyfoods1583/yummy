@@ -23,4 +23,23 @@
 #         "details":"ruhan43@gmail.com",
 #         "curr_sub_dist_id":1
 # }
-GET http://localhost:3000/api/v1/restaurants?rating_order=ASC&name=ne&
+# GET http://localhost:3000/api/v1/restaurants?rating_order=ASC&name=ne&
+
+# POST  http://localhost:3000/api/v1/restaurant
+# Content-Type: application/json
+
+# {
+#     "user_type":"RES",
+#     "sub_dist_id":100,
+#     "dist_name":"Cumilla",
+#     "sub_dist_name":"Rakhalpara",
+#     "user_id": "ruhan",
+#     "password": "2205043R",
+#     "name":"Ruhan",
+#     "mobile": "01111111111",
+#     "email": "ruhan43@gmail.com",
+#     "photo_url":"http://google.com",
+#     "details":"ruhan43@gmail.com"
+# }
+
+GET http://localhost:3000/api/v1/categories

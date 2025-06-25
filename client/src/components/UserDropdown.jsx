@@ -7,6 +7,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons"
 import YummyDataFetch from "../Api/YummyDataFetch"
 import { useNavigate } from "react-router-dom"
 import { YummyContext } from "../contexts/YummyContextProvider"
+import { Link } from "react-router-dom"
 
 const UserDropdown = () => {
   const navigate = useNavigate()
@@ -34,8 +35,8 @@ const UserDropdown = () => {
     }
   }
 
-  //hadling the logout
-  const { setCurrentUser } = useContext(YummyContext)
+  //handling the logout
+  const { current_user, setCurrentUser } = useContext(YummyContext)
   const handleLogout = async () => {
     try {
       const response = await YummyDataFetch.post(`/logout`)
@@ -63,29 +64,21 @@ const UserDropdown = () => {
         />
       </button>
       <ul ref={dropdownRef} className={`dropdown-menu ${isOpen ? "show" : ""}`}>
-        <li>
-          <a className="dropdown-item" href="#">
-            Action
-          </a>
-        </li>
-        <li>
-          <a className="dropdown-item" href="#">
-            Another action
-          </a>
-        </li>
-        <li>
-          <a className="dropdown-item" href="#">
-            Something else here
-          </a>
+        {/*dropdown items for all users*/}
+        <li style={{ cursor: "pointer" }}>
+          <Link
+            to={`/${current_user.user_type}/${current_user.user_id}/profile`}
+            className="dropdown-item"
+          >
+            Profile
+          </Link>
         </li>
         <li>
           <hr className="dropdown-divider" />
         </li>
-        <li>
+        <li onClick={handleLogout}>
           <span className="dropdown-item" style={{ cursor: "pointer" }}>
-            <span className="text-danger fw-bold" onClick={handleLogout}>
-              Log Out
-            </span>
+            <span className="text-danger fw-bold">Log Out</span>
           </span>
         </li>
       </ul>

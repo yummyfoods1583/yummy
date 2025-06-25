@@ -5,17 +5,22 @@ import React, { useState } from "react"
 import { useEffect, useContext } from "react"
 import { YummyContext } from "../../contexts/YummyContextProvider"
 import YummyDataFetch from "../../Api/YummyDataFetch"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import ImageFinder from "../../Api/ImageFinder"
 
-const RiderRegister = () => {
+const RestaurantRegister = () => {
   /***********Variables************/
+
+  //raw useState for manual location input---
+  const [manualInput, setManualInput] = useState(false)
 
   //react-hook-form variables
   const {
     register,
     handleSubmit,
     setError,
+    setValue,
+    control,
     formState: { errors, isSubmitting },
   } = useForm()
 
@@ -52,6 +57,17 @@ const RiderRegister = () => {
       })
       return // stop submission
     }
+    //cancel submission if there is no valid address
+    if (
+      (!data.dist_name && !data.dist_name2) ||
+      (!data.sub_dist_id && !data.sub_dist_name2)
+    ) {
+      setError("dist_name2", {
+        type: "manual",
+        message: "Please choose a valid address",
+      })
+      return // stop submission
+    }
 
     //cancel submission on invalid email id
     const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
@@ -67,22 +83,48 @@ const RiderRegister = () => {
 
     //first try to upload the image and get the url---
     let photo_url = null
-    try {
-      const sendData = new FormData()
-      sendData.append("file", data.photo[0])
-      sendData.append("upload_preset", "Yummy-Image-Cloud")
-      sendData.append("folder", "Rider_Photos")
-      const response = await ImageFinder.post(``, sendData)
-      photo_url = response.data.url
-      console.log(photo_url)
-    } catch (error) {
-      alert(
-        "An Error Occurred while uploading photo... so the registration cancelled"
-      )
-      return
+    if (data.photo.length) {
+      try {
+        const sendData = new FormData()
+        sendData.append("file", data.photo[0])
+        sendData.append("upload_preset", "Yummy-Image-Cloud")
+        sendData.append("folder", "Restaurant_Photos")
+        const response = await ImageFinder.post(``, sendData)
+        photo_url = response.data.url
+        console.log(photo_url)
+      } catch (error) {
+        alert(
+          "An Error Occurred while uploading photo... so the registration cancelled"
+        )
+        return
+      }
+    }
+
+    const opening_time = `2000-01-01 ${String(data.opening_hour).padStart(
+      2,
+      "0"
+    )}:${String(data.opening_minute).padStart(2, "0")}:00`
+    const closing_time = `2000-01-01 ${String(data.closing_hour).padStart(
+      2,
+      "0"
+    )}:${String(data.closing_minute).padStart(2, "0")}:00`
+
+    let closeUntil = null
+    if (data.close_until) {
+      const d = new Date(data.close_until)
+      // Format to 'YYYY-MM-DD HH:mm:ss'
+      closeUntil = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}-${String(d.getDate()).padStart(2, "0")} ${String(
+        d.getHours()
+      ).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}:${String(
+        d.getSeconds()
+      ).padStart(2, "0")}`
     }
 
     const request = {
+      user_type: "RES",
       user_id: data.user_id,
       password: data.password,
       name: data.name,
@@ -90,12 +132,21 @@ const RiderRegister = () => {
       email: data.email || null,
       photo_url: photo_url,
       details: data.details || null,
-      curr_sub_dist_id: data.curr_sub_dist_id,
+      dist_name: manualInput ? data.dist_name2 : data.dist_name,
+      sub_dist_id: manualInput ? -1 : data.sub_dist_id,
+      sub_dist_name: manualInput ? data.sub_dist_name2 : null,
+      payment_method: data.payment_method,
+      detailed_address: data.detailed_address,
+      opening_time: opening_time,
+      closing_time: closing_time,
+      close_until: closeUntil,
+      rating: 0,
+      manager_name:"TOKY",
     }
 
     console.log(request)
     try {
-      const response = await YummyDataFetch.post(`/rider`, request)
+      const response = await YummyDataFetch.post(`/restaurant`, request)
       if (response.data.data_length == 0) {
         alert("Username Aready Exists Please Choose Another Usrename")
       } else {
@@ -103,7 +154,7 @@ const RiderRegister = () => {
           "user",
           JSON.stringify({
             user_id: request.user_id,
-            user_type: "RID",
+            user_type: "RES",
           })
         )
       }
@@ -121,11 +172,12 @@ const RiderRegister = () => {
     setSubDistricts(response.data.data.subdistricts)
   }
 
+  //track dropdown selections...
   return (
     <>
       <div className="conatiner-fluid mt-3">
         <div className="container d-flex justify-content-center">
-          <h2>Rider Registration</h2>
+          <h2>Restaurant Registration</h2>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex justify-content-between align-items-center p-2">
@@ -218,7 +270,7 @@ const RiderRegister = () => {
             </div>
           )}
           <div className="d-flex justify-content-between align-items-center p-2">
-            <label className="form-label">Enter your name*</label>
+            <label className="form-label">Enter Restaurant name*</label>
           </div>
           <input
             type="text"
@@ -275,25 +327,17 @@ const RiderRegister = () => {
             </div>
           )}
           <div className="d-flex justify-content-between align-items-center p-2">
-            <label className="form-label">Enter you photo*</label>
+            <label className="form-label">Enter Restauant Photo</label>
           </div>
           <input
             className="form-control mb-3"
             type="file"
-            {...register("photo", {
-              required: {
-                value: true,
-                message: "Please submit your photo...",
-              },
-            })}
+            {...register("photo")}
           />
-          {errors.photo && (
-            <div className="alert alert-danger" role="alert">
-              {errors.photo.message}
-            </div>
-          )}
           <div className="d-flex justify-content-between align-items-center p-2">
-            <label className="form-label">Let's know more about you...</label>
+            <label className="form-label">
+              Put more information about the restaurant...
+            </label>
           </div>
           <textarea
             className="form-control mb-3"
@@ -302,8 +346,8 @@ const RiderRegister = () => {
           ></textarea>
           <div className="d-flex justify-content-between align-items-center p-2">
             <label className="form-label">
-              Please select your current location from below. It will be used to
-              suggest nearby orders.**
+              Please select restaurant location from below. If your location is
+              not present in the list then manually type it below it....
             </label>
           </div>
           <div className="container-fluid">
@@ -315,9 +359,10 @@ const RiderRegister = () => {
                   onChange={(e) => {
                     findSubDistricts(e)
                   }}
+                  disabled={manualInput}
                 >
                   <option value="" hidden>
-                    select your current district*
+                    select district*
                   </option>
                   {districts.map((district) => {
                     return (
@@ -334,15 +379,11 @@ const RiderRegister = () => {
               <div className="col-6">
                 <select
                   className="form-select mb-3"
-                  {...register("curr_sub_dist_id", {
-                    required: {
-                      value: true,
-                      message: "Please Select Your current Location",
-                    },
-                  })}
+                  {...register("sub_dist_id")}
+                  disabled={manualInput}
                 >
                   <option value="" hidden>
-                    select your current sub-district*
+                    select sub-district*
                   </option>
                   {subdistricts.map((subdistrict) => {
                     return (
@@ -359,9 +400,198 @@ const RiderRegister = () => {
             </div>
             {errors.curr_sub_dist_id && (
               <div className="alert alert-danger" role="alert">
-                {errors.curr_sub_dist_id.message}
+                {errors.sub_dist_id.message}
               </div>
             )}
+            {/*toggle button between manual and dropdown input */}
+            <div className="text-center mb-3">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() => {
+                  setManualInput((prev) => !prev)
+                  setValue("dist_name", null)
+                  setValue("sub_dist_id", null)
+                  setValue("dist_name2", null)
+                  setValue("sub_dist_name2", null)
+                  setSubDistricts([])
+                }}
+              >
+                {manualInput
+                  ? "Use Dropdown Instead"
+                  : "Manually Input Location"}
+              </button>
+            </div>
+            {/* Manual Input Fields */}
+            <div className="row row-cols-2">
+              <div className="col-6">
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Manually enter district"
+                  {...register("dist_name2")}
+                  disabled={!manualInput}
+                />
+              </div>
+              <div className="col-6">
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Manually enter sub-district"
+                  {...register("sub_dist_name2")}
+                  disabled={!manualInput}
+                />
+              </div>
+            </div>
+            {errors.dist_name2 && (
+              <div className="alert alert-danger" role="alert">
+                {errors.dist_name2.message}
+              </div>
+            )}
+          </div>
+          <div className="conatiner-fluid mt-3">
+            <label className="form-label">Enter the detailed address*</label>
+            <input
+              type="text"
+              className="form-control mb-3"
+              {...register("detailed_address", {
+                required: {
+                  value: true,
+                  message: "Please enter the detailed address",
+                },
+              })}
+            />
+            {errors.detailed_address && (
+              <div className="alert alert-danger" role="alert">
+                {errors.detailed_address.message}
+              </div>
+            )}
+          </div>
+          <div className="conatiner-fluid">
+            <div className="row">
+              <div className="col-6">
+                <div>
+                  <label className="form-label">Payment Method*</label>
+                  <select
+                    className="form-select mb-3"
+                    {...register("payment_method", {
+                      required: {
+                        value: true,
+                        message: "Please select the payment method",
+                      },
+                    })}
+                  >
+                    <option value="" hidden>
+                      Select the payment method
+                    </option>
+                    <option value="COD">Cash on delivery</option>
+                    <option value="ONLINE">Online</option>
+                    <option value="BOTH">Both</option>
+                  </select>
+                  {errors.payment_method && (
+                    <div className="alert alert-danger" role="alert">
+                      {errors.payment_method.message}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          {/*Opening time----*/}
+          <div className="container-fluid mt-3">
+            <label className="form-label">Daily Opening Time*</label>
+            <div className="row row-cols-2">
+              <div className="col-6">
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Hour (0–23)"
+                  {...register("opening_hour", {
+                    required: "Please enter opening hour",
+                    pattern: {
+                      value: /^(0?[0-9]|1[0-9]|2[0-3])$/,
+                      message: "Hour must be between 0 and 23",
+                    },
+                  })}
+                />
+                {errors.opening_hour && (
+                  <div className="alert alert-danger" role="alert">
+                    {errors.opening_hour.message}
+                  </div>
+                )}
+              </div>
+              <div className="col-6">
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Minute (0–59)"
+                  {...register("opening_minute", {
+                    required: "Please enter opening minute",
+                    pattern: {
+                      value: /^[0-5]?[0-9]$/,
+                      message: "Minute must be between 0 and 59",
+                    },
+                  })}
+                />
+                {errors.opening_minute && (
+                  <div className="alert alert-danger" role="alert">
+                    {errors.opening_minute.message}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          {/*Closing time----*/}
+          <div className="container-fluid mt-3">
+            <label className="form-label">Daily Closing Time*</label>
+            <div className="row row-cols-2">
+              <div className="col-6">
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Hour (0–23)"
+                  {...register("closing_hour", {
+                    required: "Please enter closing hour",
+                    pattern: {
+                      value: /^(0?[0-9]|1[0-9]|2[0-3])$/,
+                      message: "Hour must be between 0 and 23",
+                    },
+                  })}
+                />
+                {errors.closing_hour && (
+                  <div className="alert alert-danger" role="alert">
+                    {errors.closing_hour.message}
+                  </div>
+                )}
+              </div>
+              <div className="col-6">
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Minute (0-59)"
+                  {...register("closing_minute", {
+                    required: "Please enter closing minute",
+                    pattern: {
+                      value: /^[0-5]?[0-9]$/,
+                      message: "Minute must be between 0 and 59",
+                    },
+                  })}
+                />
+                {errors.closing_minute && (
+                  <div className="alert alert-danger" role="alert">
+                    {errors.closing_minute.message}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="conatiner-fluid mt-3">
+            <label className="form-label">Closed Until (optional)</label>
+            <input
+              type="datetime-local"
+              className="form-control mb-3"
+              {...register("close_until")}
+            />
           </div>
           <div className="container-fluid d-flex justify-content-center mt-3">
             <button
@@ -379,4 +609,4 @@ const RiderRegister = () => {
   )
 }
 
-export default RiderRegister
+export default RestaurantRegister

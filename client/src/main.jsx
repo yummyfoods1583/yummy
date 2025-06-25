@@ -11,6 +11,8 @@ import YummyContextProvider from "./contexts/YummyContextProvider.jsx"
 import Login from "./routes/Login.jsx"
 import Register from "./routes/Register.jsx"
 import Restaurants from "./routes/Restaurants.jsx"
+import Profile from "./routes/Profile.jsx"
+import Dishes from "./routes/Dishes.jsx"
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
   {
     path: "/restaurants",
     element: <Restaurants />,
+  },
+  {
+    path: "/dishes",
+    element: <Dishes />,
+  },
+  {
+    path: "/:user_type/:id/profile",
+    element: <Profile />,
   },
 ])
 

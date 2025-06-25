@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faStar } from "@fortawesome/free-solid-svg-icons"
 
 const Restaurant_Card = ({ restaurant }) => {
-  if (restaurant.photo_url === null) restaurant.photo_url = "/Images/Intro3.png"
+  if (restaurant.photo_url === null || restaurant.photo_url === "")
+    restaurant.photo_url = "/Images/No_Image.jpg"
   //fetch opening and closing time
   let temp = new Date(restaurant.opening_time)
   //calculate opening time as the minutes past midnigh
@@ -19,8 +20,14 @@ const Restaurant_Card = ({ restaurant }) => {
   return (
     <>
       <div
-        className="card shadow-lg"
-        style={{ width: "400px", cursor: "pointer" }}
+        className="card shadow-lg transition-transform"
+        style={{
+          width: "400px",
+          cursor: "pointer",
+          transition: "transform 0.3s ease-in-out",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
       >
         <img
           src={restaurant.photo_url}
@@ -82,4 +89,3 @@ const Restaurant_Card = ({ restaurant }) => {
 }
 
 export default Restaurant_Card
-

@@ -5,7 +5,9 @@ const db = require("./Api")
 const cors = require("cors")
 const jwt = require("jsonwebtoken")
 const cookieParser = require("cookie-parser")
-const authorizeJWT =require("./authorize.js")
+const authorizeJWT = require("./authorize.js")
+const dishes = require("./Routes/dishes.js")
+const categories = require("./Routes/categories.js")
 
 //variables
 const app = express()
@@ -69,7 +71,7 @@ app.post("/api/v1/login", async (req, res) => {
       httpOnly: true,
       secure: false,
       sameSite: "Strict",
-      maxAge: 60 * 60 * 1000,
+      maxAge: 60 * 60 * 1000, //1hr
     })
     //sending response
     res.status(200).json({
@@ -103,7 +105,6 @@ app.post("/api/v1/logout", (req, res) => {
   })
 })
 
-
 //fetch the subdistricts
 app.get("/api/v1/subdistricts/:id", async (req, res) => {
   try {
@@ -126,7 +127,7 @@ app.get("/api/v1/subdistricts/:id", async (req, res) => {
   }
 })
 
-//register a new customer
+//register a new rider
 app.post("/api/v1/rider", async (req, res) => {
   try {
     const result1 = await db.query(
@@ -167,6 +168,65 @@ app.post("/api/v1/rider", async (req, res) => {
       message: "internal server error",
     })
   }
+})
+
+//register a new restaurant
+app.post("/api/v1/restaurant", async (req, res) => {
+  let sub_dist_id = req.body.sub_dist_id
+  const sub_dist_check = await db.query(
+    "SELECT * FROM SUB_DISTRICT WHERE SUB_DIST_ID=$1",
+    [req.body.sub_dist_id]
+  )
+  const dist_check = await db.query(
+    "SELECT * FROM DISTRICT WHERE DIST_NAME=$1",
+    [req.body.dist_name]
+  )
+  if (dist_check.rows.length === 0) {
+    await db.query("INSERT INTO DISTRICT (DIST_NAME) VALUES($1)", [
+      req.body.dist_name,
+    ])
+  }
+  if (sub_dist_check.rows.length === 0) {
+    const temp = await db.query(
+      "INSERT INTO SUB_DISTRICT (DIST_NAME, SUB_DIST_NAME) VALUES($1, $2) RETURNING SUB_DIST_ID",
+      [req.body.dist_name, req.body.sub_dist_name]
+    )
+    sub_dist_id = temp.rows[0]
+  }
+  const result = await db.query(
+    "INSERT INTO USERS VALUES ($1, $2, $3, $4, $5) returning *",
+    [
+      req.body.user_id,
+      req.body.user_type,
+      req.body.name,
+      req.body.password,
+      req.body.mobile,
+    ]
+  )
+  const result2 = await db.query(
+    "INSERT INTO RESTAURANT (REST_ID, EMAIL, OPENING_TIME, CLOSING_TIME, CLOSE_UNTIL, REST_DETAILS, MANAGER_NAME, PHOTO_URL, PAYMENT_METHOD, RATING, DETAILED_ADDRESS, SUB_DIST_ID) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
+    [
+      req.body.user_id,
+      req.body.email,
+      req.body.opening_time, // should be a proper timestamp format
+      req.body.closing_time, // same as above
+      req.body.close_until, // nullable timestamp
+      req.body.rest_details,
+      req.body.manager_name,
+      req.body.photo_url,
+      req.body.payment_method,
+      req.body.rating, // numeric
+      req.body.detailed_address,
+      sub_dist_id,
+    ]
+  )
+  res.status(200).json({
+    status: "succes",
+    data_length: result.rows.length,
+    data: {
+      restaurant: result.rows[0],
+    },
+  })
 })
 
 //get restaurants based on query location
@@ -233,23 +293,30 @@ ORDER BY R1.RATING ${rating_order}`,
 })
 
 //fetch admin data
-app.get("/api/v1/ADM/:id", authorizeJWT, async (req, res) => {
+app.get("/api/v1/ADM/:id/profile", authorizeJWT, async (req, res) => {
   try {
     const admin_id = req.params.id
 
     // Fetch admin data from DB (modify table/columns as needed)
-    const result = await db.query("SELECT * FROM ADMIN WHERE ADMIN_ID = $1", [
+    const result1 = await db.query("SELECT * FROM ADMIN WHERE ADMIN_ID = $1", [
       admin_id,
     ])
-
-    if (result.rows.length === 0) {
+    const result2 = await db.query(
+      "SELECT USER_ID,USER_TYPE, NAME, MOBILE FROM USERS WHERE USER_ID = $1",
+      [admin_id]
+    )
+    const result = {
+      ...result1.rows[0],
+      ...result2.rows[0],
+    }
+    if (result1.rows.length === 0 || result2.rows.length === 0) {
       return res.status(404).json({ message: "Admin not found" })
     }
 
     res.status(200).json({
       status: "success",
       data: {
-        user: result.rows[0],
+        user: result,
       },
     })
   } catch (err) {
@@ -257,6 +324,114 @@ app.get("/api/v1/ADM/:id", authorizeJWT, async (req, res) => {
     res.status(500).json({ message: "Internal server error" })
   }
 })
+
+//fetch customer data
+app.get("/api/v1/CUS/:id/profile", authorizeJWT, async (req, res) => {
+  try {
+    const customer_id = req.params.id
+
+    // Fetch admin data from DB (modify table/columns as needed)
+    const result1 = await db.query(
+      "SELECT C.*, (S.SUB_DIST_NAME||', '||S.DIST_NAME) AS ADDRESS FROM CUSTOMER C LEFT JOIN SUB_DISTRICT S ON(C.SUB_DIST_ID=S.SUB_DIST_ID) WHERE CUSTOMER_ID = $1",
+      [customer_id]
+    )
+    const result2 = await db.query(
+      "SELECT USER_ID,USER_TYPE, NAME, MOBILE FROM USERS WHERE USER_ID = $1",
+      [customer_id]
+    )
+    const result = {
+      ...result1.rows[0],
+      ...result2.rows[0],
+    }
+    if (result1.rows.length === 0 || result2.rows.length === 0) {
+      return res.status(404).json({ message: "Customer not found" })
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        user: result,
+      },
+    })
+  } catch (err) {
+    console.error("Customer fetch error:", err)
+    res.status(500).json({ message: "Internal server error" })
+  }
+})
+
+//fetch restaurant data
+app.get("/api/v1/RES/:id/profile", authorizeJWT, async (req, res) => {
+  try {
+    const rest_id = req.params.id
+
+    // Fetch admin data from DB (modify table/columns as needed)
+    const result1 = await db.query(
+      "SELECT * FROM RESTAURANT WHERE REST_ID = $1",
+      [rest_id]
+    )
+    const result2 = await db.query(
+      "SELECT USER_ID,USER_TYPE, NAME, MOBILE FROM USERS WHERE USER_ID = $1",
+      [rest_id]
+    )
+    const result = {
+      ...result1.rows[0],
+      ...result2.rows[0],
+    }
+    if (result1.rows.length === 0 || result2.rows.length === 0) {
+      return res.status(404).json({ message: "Restaurant not found" })
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        user: result,
+      },
+    })
+  } catch (err) {
+    console.error("Restaurant fetch error:", err)
+    res.status(500).json({ message: "Internal server error" })
+  }
+})
+
+//fetch rider data
+app.get("/api/v1/RID/:id/profile", authorizeJWT, async (req, res) => {
+  try {
+    const rider_id = req.params.id
+
+    // Fetch admin data from DB (modify table/columns as needed)
+    const result1 = await db.query(
+      "SELECT R.*, (S.SUB_DIST_NAME||', '||S.DIST_NAME) AS ADDRESS FROM RIDER R LEFT JOIN SUB_DISTRICT S ON(R.CURR_SUB_DIST=S.SUB_DIST_ID) WHERE RIDER_ID = $1",
+      [rider_id]
+    )
+    const result2 = await db.query(
+      "SELECT USER_ID,USER_TYPE, NAME, MOBILE FROM USERS WHERE USER_ID = $1",
+      [rider_id]
+    )
+    const result = {
+      ...result1.rows[0],
+      ...result2.rows[0],
+    }
+    if (result1.rows.length === 0 || result2.rows.length === 0) {
+      return res.status(404).json({ message: "Rider not found" })
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        user: result,
+      },
+    })
+  } catch (err) {
+    console.error("Rider fetch error:", err)
+    res.status(500).json({ message: "Internal server error" })
+  }
+})
+
+//get request for dishes
+app.get("/api/v1/dishes", dishes)
+
+//get request for categories
+app.get("/api/v1/categories", categories)
 
 app.listen(process.env.PORT, () => {
   console.log(`server is listening at port: ${process.env.PORT}`)

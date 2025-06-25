@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import RiderRegister from "../components/register/RiderRegister"
 import CustomerRegister from "../components/register/CustomerRegister"
+import RestaurantRegister from "../components/register/RestaurantRegister"
 
 
 const Register = () => {
@@ -40,6 +41,7 @@ const Register = () => {
         </form>
         {accountType === "RID" && <RiderRegister />}
         {accountType === "CUS" && <CustomerRegister />}
+        {accountType === "RES" && <RestaurantRegister />}
       </div>
     </>
   )

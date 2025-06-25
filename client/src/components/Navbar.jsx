@@ -1,4 +1,4 @@
-import React, { useContext,useEffect } from "react"
+import React, { useContext, useEffect } from "react"
 import "bootstrap/dist/css/bootstrap.min.css"
 import { NavLink, Link } from "react-router-dom"
 import UserDropdown from "./UserDropdown"
@@ -52,9 +52,9 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li>
-              <a href="#" className="nav-link px-2">
+              <NavLink to="/dishes" className="nav-link px-2">
                 Our Menus
-              </a>
+              </NavLink>
             </li>
           </ul>
           <div className="col-md-3 text-end d-flex justify-content-center gap-3">
@@ -76,7 +76,12 @@ const Navbar = () => {
                 </Link>
               </>
             )}
-            {current_user && <UserDropdown />}
+            {current_user && (
+              <>
+                <span>{current_user.user_id}</span>
+                <UserDropdown />
+              </>
+            )}
           </div>
         </header>
       </div>
