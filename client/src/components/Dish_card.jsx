@@ -16,18 +16,45 @@
 
 import { faStar } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import React from "react"
+import React, { useContext, useEffect, useState } from "react"
 import Dish_Details from "./Modal/Dish_Details"
+import YummyDataFetch from "../Api/YummyDataFetch.jsx"
+import { useNavigate } from "react-router-dom"
+import { YummyContext } from "../contexts/YummyContextProvider.jsx"
+import Add_to_cart from "./Modal/Add_to_cart.jsx"
 
-const Dish_card = ({ dish }) => {
+const Dish_card = ({ dish, restaurant }) => {
   const photo_url = dish.photo_url || "/Images/No_Image.jpg"
-  let categories = ""
-  if (dish.categories) {
-    for (let i = 0; i < dish.categories.length - 1; i++) {
-      categories += dish.categories[i] + " - "
+  const [categories, setCategories] = useState([])
+  const navigate = useNavigate()
+  const { setCurrentDish } = useContext(YummyContext)
+
+  //fetch category of the food items
+  const fetchCategories = async () => {
+    try {
+      const response = await YummyDataFetch.get(`/category/${dish.dish_id}`)
+      setCategories(response.data.data.categories)
+    } catch (error) {
+      if (error.response) {
+        console.error("Response Error: " + error.response.data)
+        console.error("Response Error Status: " + error.response.status)
+      } else if (error.request) {
+        console.error("No response recieved: " + error.request)
+      } else {
+        console.error("Axios error: " + error.message)
+      }
     }
-    categories += dish.categories[dish.categories.length - 1]
   }
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  let category_str = ""
+  for (let i = 0; i < categories.length - 1; i++) {
+    category_str += categories[i] + " - "
+  }
+  category_str += categories[categories.length - 1]
+
   return (
     <>
       <div
@@ -54,7 +81,7 @@ const Dish_card = ({ dish }) => {
           </div>
           <hr />
           <p className="fs-5">{dish.restaurant_name}</p>
-          <p>{categories}</p>
+          <p>{category_str}</p>
           {/*Order & Details Button */}
           <div className="container d-flex justify-content-between">
             <button
@@ -64,7 +91,32 @@ const Dish_card = ({ dish }) => {
             >
               Details
             </button>
-            <button className="btn btn-primary mt-0 mb-1">Add to Cart</button>
+            {/*add order that will lead to the restaurant */}
+            {!restaurant && (
+              <button
+                className="btn btn-warning mt-0 mb-1"
+                onClick={() => {
+                  setCurrentDish(dish)
+                  navigate(`/restaurant/${dish.rest_id}`)
+                }}
+              >
+                Order
+              </button>
+            )}
+            {/*add add to cart that will lead to the restaurant */}
+            {restaurant && (
+              <>
+                <button
+                  className="btn btn-primary mt-0 mb-1"
+                  data-bs-toggle="modal"
+                  data-bs-target={`#add_to_cart_modal_${dish.dish_id}`}
+                >
+                  Add to cart
+                </button>
+                <Add_to_cart dish={dish}/>
+              </>
+            )}
+            <button className="btn btn-success mt-0 mb-1">Review</button>
           </div>
         </div>
         {/*details modal */}

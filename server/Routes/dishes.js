@@ -10,6 +10,7 @@ const dishes = async (req, res) => {
       dish_name,
       available,
       category_name,
+      rest_id,
     } = req.query
 
     const result = await db.query(
@@ -31,6 +32,7 @@ const dishes = async (req, res) => {
           AND ($5::TEXT IS NULL OR LOWER(D.DISH_NAME) LIKE ('%' || LOWER($5) || '%'))
           AND ($6=FALSE OR AVAILABLE=$6)
           AND ($7::TEXT IS NULL OR C.CATEGORY_NAME=$7)
+          AND ($8::TEXT IS NULL OR R.REST_ID=$8)
         GROUP BY
           D.DISH_ID,
           D.REST_ID,
@@ -49,6 +51,7 @@ const dishes = async (req, res) => {
         dish_name || null,
         available,
         category_name || null,
+        rest_id || null,
       ]
     )
 

@@ -42,4 +42,4 @@
 #     "details":"ruhan43@gmail.com"
 # }
 
-GET http://localhost:3000/api/v1/categories
+GET http://localhost:3000/api/v1/restaurant/the-cuisine-hub

@@ -1,6 +1,7 @@
 import React from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faStar } from "@fortawesome/free-solid-svg-icons"
+import { Link } from "react-router-dom"
 
 const Restaurant_Card = ({ restaurant }) => {
   if (restaurant.photo_url === null || restaurant.photo_url === "")
@@ -19,71 +20,75 @@ const Restaurant_Card = ({ restaurant }) => {
     restaurant.close_until === null ? null : new Date(restaurant.close_until)
   return (
     <>
-      <div
-        className="card shadow-lg transition-transform"
-        style={{
-          width: "400px",
-          cursor: "pointer",
-          transition: "transform 0.3s ease-in-out",
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
-        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      >
-        <img
-          src={restaurant.photo_url}
-          className="card-img-top"
-          width={"400px"}
-          height={"225px"}
-        />
-        <div className="card-body">
-          <div className="d-flex justify-content-between">
-            <p className="card-title fs-5">{restaurant.name}</p>
-            <div>
-              <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-              <span className="ms-1 fw-bold">{restaurant.rating}</span>
-              <span className="ms-1">({restaurant.review_count})</span>
+      <Link to={`/restaurant/${restaurant.rest_id}`} className="text-decoration-none">
+        <div
+          className="card shadow-lg transition-transform"
+          style={{
+            width: "400px",
+            cursor: "pointer",
+            transition: "transform 0.3s ease-in-out",
+          }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.transform = "scale(1.03)")
+          }
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        >
+          <img
+            src={restaurant.photo_url}
+            className="card-img-top"
+            width={"400px"}
+            height={"225px"}
+          />
+          <div className="card-body">
+            <div className="d-flex justify-content-between">
+              <p className="card-title fs-5">{restaurant.name}</p>
+              <div>
+                <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
+                <span className="ms-1 fw-bold">{restaurant.rating}</span>
+                <span className="ms-1">({restaurant.review_count})</span>
+              </div>
             </div>
-          </div>
 
-          <hr />
-          <p className="card-text">{restaurant.detailed_address}</p>
-        </div>
-        {/*Display Closing time*/}
-        {close_until === null &&
-          current_time < opening_time &&
-          current_time > closing_time && (
+            <hr />
+            <p className="card-text">{restaurant.detailed_address}</p>
+          </div>
+          {/*Display Closing time*/}
+          {close_until === null &&
+            current_time < opening_time &&
+            current_time > closing_time && (
+              <div
+                className="Container-fluid bg-black position-absolute bg-opacity-75 d-flex justify-content-center align-items-center fw-bold fs-5"
+                style={{ width: "400px", height: "225px" }}
+              >
+                {
+                  <span className="text-white">
+                    Close Until:{"\t"} {opening_hr.toString().padStart(2, "0")}:
+                    {opening_min.toString().padStart(2, "0")}
+                  </span>
+                }
+              </div>
+            )}
+
+          {/*Display Close Until*/}
+          {close_until !== null && close_until > new Date() && (
             <div
               className="Container-fluid bg-black position-absolute bg-opacity-75 d-flex justify-content-center align-items-center fw-bold fs-5"
               style={{ width: "400px", height: "225px" }}
             >
               {
                 <span className="text-white">
-                  Close Until:{"\t"} {opening_hr.toString().padStart(2, "0")}:
-                  {opening_min.toString().padStart(2, "0")}
+                  Close Until:{"\t"}
+                  {close_until.getDate().toString().padStart(2, "0")}-
+                  {(close_until.getMonth() + 1).toString().padStart(2, "0")}-
+                  {close_until.getFullYear()}
+                  {"\t"}({close_until.getHours().toString().padStart(2, "0")}:
+                  {close_until.getMinutes().toString().padStart(2, "0")})
                 </span>
               }
             </div>
           )}
-
-        {/*Display Close Until*/}
-        {close_until !== null && close_until > new Date() && (
-          <div
-            className="Container-fluid bg-black position-absolute bg-opacity-75 d-flex justify-content-center align-items-center fw-bold fs-5"
-            style={{ width: "400px", height: "225px" }}
-          >
-            {
-              <span className="text-white">
-                Close Until:{"\t"}
-                {close_until.getDate().toString().padStart(2, "0")}-
-                {(close_until.getMonth() + 1).toString().padStart(2, "0")}-
-                {close_until.getFullYear()}
-                {"\t"}({close_until.getHours().toString().padStart(2, "0")}:
-                {close_until.getMinutes().toString().padStart(2, "0")})
-              </span>
-            }
-          </div>
-        )}
-      </div>
+        </div>
+      </Link>
     </>
   )
 }

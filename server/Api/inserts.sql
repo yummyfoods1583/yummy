@@ -1,0 +1,142 @@
+INSERT INTO "district" ("dist_name", "dist_photo") VALUES ('Dhaka', 'https://res.cloudinary.com/dvm1qpuvn/image/upload/v1749028831/Dhaka_ivxugd.jpg');
+INSERT INTO "district" ("dist_name", "dist_photo") VALUES ('Rangpur', 'https://res.cloudinary.com/dvm1qpuvn/image/upload/v1749028938/Rangpur_ivvpfn.jpg');
+INSERT INTO "district" ("dist_name", "dist_photo") VALUES ('Sylhet', 'https://res.cloudinary.com/dvm1qpuvn/image/upload/v1749029020/Sylhet_wxjxn7.jpg');
+INSERT INTO "district" ("dist_name", "dist_photo") VALUES ('Patuakhali	', NULL);
+
+
+INSERT INTO "sub_district" ("sub_dist_id", "dist_name", "sub_dist_name") VALUES ('1', 'Dhaka', 'Mirpur');
+INSERT INTO "sub_district" ("sub_dist_id", "dist_name", "sub_dist_name") VALUES ('2', 'Dhaka', 'Mohammadpur');
+INSERT INTO "sub_district" ("sub_dist_id", "dist_name", "sub_dist_name") VALUES ('3', 'Dhaka', 'Azimpur');
+INSERT INTO "sub_district" ("sub_dist_id", "dist_name", "sub_dist_name") VALUES ('4', 'Rangpur', 'Pirgaccha');
+INSERT INTO "sub_district" ("sub_dist_id", "dist_name", "sub_dist_name") VALUES ('6', 'Sylhet', 'Golapganj');
+INSERT INTO "sub_district" ("sub_dist_id", "dist_name", "sub_dist_name") VALUES ('7', 'Dhaka', 'Banani');
+
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('admin123', 'ADM', 'Yummy Admin', '123Admin', '111111111111111');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('ruhan-ruhan', 'CUS', 'Ruhan', '2205043R', '011111111111');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('shoyaib', 'CUS', 'Md. Shoyaib Rezwan', '2205014MSR', '01775899614');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('tokysami', 'CUS', 'Toky Tahmid Sami', '2205020TTS', '01755678109');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('hmahee', 'RID', 'Hasan Mahee', '2205015HFM', '01764245637');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('samimhb', 'RID', 'Sami Mahbub', '2205024SM', '01717713953');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('the-cuisine-hub', 'RES', 'The Cusine Hub', '1234567TCH', '99999999999');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('segreto', 'RES', 'Segreto', '1234567S', '99999999999');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('sugar-crush-and-co', 'RES', 'Sugar Crush And CO', '1234567SCAC', '99999999999');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('the-nest', 'RES', 'The Nest', '1234567TH', '99999999999');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('seasons-restaurant-and-cafe', 'RES', 'SEASONS Restaurant & Café', '1234567SRAC', '99999999999');
+INSERT INTO "users" ("user_id", "user_type", "name", "password", "mobile") VALUES ('the-tehari-ghar-banani', 'RES', 'The Tehari Ghar Banai', '1234567TTGB', '99999999999');
+
+
+INSERT INTO "admin" ("admin_id", "email", "commission_pct") VALUES ('admin123', 'admin@yummy.com', '0.1');
+
+INSERT INTO "customer" ("customer_id", "email", "photo_url", "details", "sub_dist_id") VALUES ('ruhan-ruhan', 'ruhan123@gmail.com', 'http://res.cloudinary.com/dvm1qpuvn/image/upload/v1749129902/Customer_Photos/ymmbbcqyagvzm7emqeca.jpg', 'I am groot!!', '3');
+INSERT INTO "customer" ("customer_id", "email", "photo_url", "details", "sub_dist_id") VALUES ('shoyaib', 'shoyaib@gmail.com', NULL, 'I like to eat rich foods', '1');
+INSERT INTO "customer" ("customer_id", "email", "photo_url", "details", "sub_dist_id") VALUES ('tokysami', 'toky@gmail.com', NULL, 'I like all halal meat', NULL);
+
+INSERT INTO "restaurant" ("rest_id", "sub_dist_id", "email", "opening_time", "closing_time", "close_until", "rest_details", "manager_name", "photo_url", "payment_method", "rating", "detailed_address") VALUES ('segreto', '1', NULL, '2000-01-01 10:00:00', '2000-01-01 20:00:00', NULL, NULL, 'Shoyaib', NULL, 'BOTH', '4.2', ' Shurma Bhaban, Plot No, 32 Rd No. 2, Mirpur 1216');
+INSERT INTO "restaurant" ("rest_id", "sub_dist_id", "email", "opening_time", "closing_time", "close_until", "rest_details", "manager_name", "photo_url", "payment_method", "rating", "detailed_address") VALUES ('sugar-crush-and-co', '1', NULL, '2000-01-01 07:00:00', '2000-01-01 00:00:00', NULL, NULL, 'Shoyaib', NULL, 'BOTH', '4', ' Plot 14 & 15, Section 11, 01 Kalshi Rd, Mirpur');
+INSERT INTO "restaurant" ("rest_id", "sub_dist_id", "email", "opening_time", "closing_time", "close_until", "rest_details", "manager_name", "photo_url", "payment_method", "rating", "detailed_address") VALUES ('the-nest', '2', NULL, '2000-01-01 18:00:00', '2000-01-01 00:00:00', NULL, NULL, 'Shoyaib', NULL, 'BOTH', '3.9', '1, 6 Nurjahan Rd, Dhaka 1207');
+INSERT INTO "restaurant" ("rest_id", "sub_dist_id", "email", "opening_time", "closing_time", "close_until", "rest_details", "manager_name", "photo_url", "payment_method", "rating", "detailed_address") VALUES ('seasons-restaurant-and-cafe', '6', NULL, '2000-01-01 07:00:00', '2000-01-01 18:00:00', NULL, NULL, 'Shoyaib', NULL, 'BOTH', '4.2', 'Bihongo, 25/A Kazitula Rd, Sylhet 3100');
+INSERT INTO "restaurant" ("rest_id", "sub_dist_id", "email", "opening_time", "closing_time", "close_until", "rest_details", "manager_name", "photo_url", "payment_method", "rating", "detailed_address") VALUES ('the-tehari-ghar-banani', '7', NULL, '2000-01-01 08:00:00', '2000-01-01 22:30:00', NULL, NULL, 'Toky', NULL, 'BOTH', '4.2', 'QCR4+JRM, Rd No 13, Dhaka 1212');
+INSERT INTO "restaurant" ("rest_id", "sub_dist_id", "email", "opening_time", "closing_time", "close_until", "rest_details", "manager_name", "photo_url", "payment_method", "rating", "detailed_address") VALUES ('the-cuisine-hub', '1', NULL, '2000-01-01 08:00:00', '2000-01-01 21:00:00', '2025-06-14 12:00:00', NULL, 'Shoyaib', NULL, 'BOTH', '4.4', 'Top Floor, Ramjannessa Super Market, 142 Mirpur Senanibash Road, Dhaka 1216');
+
+
+INSERT INTO "rider" ("rider_id", "curr_sub_dist", "email", "rider_details", "photo_url") VALUES ('hmahee', '1', 'mahee123@gmail.com', 'I like ac.', 'http://res.cloudinary.com/dvm1qpuvn/image/upload/v1749141128/Rider_Photos/jzapm36ktamf9ljqr1a2.jpg');
+INSERT INTO "rider" ("rider_id", "curr_sub_dist", "email", "rider_details", "photo_url") VALUES ('samimhb', '1', 'samimahbub123@gmail.com', 'I like anime cosplay.', 'http://res.cloudinary.com/dvm1qpuvn/image/upload/v1749141358/Rider_Photos/ingeq1ejt0nl7jxfwx7l.jpg');
+
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('6', 'sugar-crush-and-co', 'Chocolate Lava Cake', 'Molten chocolate cake with vanilla ice cream.', '0.1', NULL, 't', '4.9');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('8', 'sugar-crush-and-co', 'Strawberry Cheesecake', 'Rich and creamy cheesecake with strawberry topping.', '0.2', NULL, 't', '4.7');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('9', 'sugar-crush-and-co', 'Red Velvet Cupcake', 'Moist red velvet cupcake with cream cheese frosting.', NULL, NULL, 't', '4.3');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('10', 'sugar-crush-and-co', 'Mini Macaron Box', 'Assorted French macarons in a gift box.', '0.1', NULL, 't', '4.5');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('11', 'the-nest', 'Grilled Chicken Sandwich', 'Toasted sandwich with grilled chicken and aioli.', '0.1', NULL, 't', '4.2');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('12', 'the-nest', 'Nest Special Breakfast', 'Eggs, toast, sausages, and hash browns.', NULL, NULL, 't', '4.1');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('14', 'the-nest', 'Veggie Wrap', 'Wrap filled with fresh grilled vegetables and hummus.', '0.05', NULL, 't', '4.0');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('15', 'the-nest', 'Cheesy Omelette', 'Omelette with cheese, herbs, and bell peppers.', '0.1', NULL, 't', '4.4');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('16', 'seasons-restaurant-and-cafe', 'Seasonal Fruit Salad', 'Fresh fruits with mint and honey dressing.', '0.1', NULL, 't', '4.0');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('18', 'seasons-restaurant-and-cafe', 'Cream of Mushroom Soup', 'Warm mushroom soup with cream and garlic.', NULL, NULL, 't', '4.2');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('19', 'seasons-restaurant-and-cafe', 'Club Sandwich', 'Triple layered sandwich with chicken and veggies.', '0.05', NULL, 't', '4.3');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('20', 'seasons-restaurant-and-cafe', 'Iced Lemon Tea', 'Cold lemon tea served with mint.', '0.1', NULL, 't', '4.1');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('22', 'the-tehari-ghar-banani', 'Chicken Tehari', 'Spicy chicken tehari with aromatic rice.', '0.05', NULL, 't', '4.5');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('23', 'the-tehari-ghar-banani', 'Egg Tehari', 'Tehari served with boiled egg and salad.', '0.1', NULL, 't', '4.3');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('24', 'the-tehari-ghar-banani', 'Beef Shami Kebab', 'Fried beef patties served with tehari.', '0.15', NULL, 't', '4.4');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('26', 'the-cuisine-hub', 'Fried Rice with Chicken', 'Stir-fried rice with chicken, vegetables and soy.', '0.1', NULL, 't', '4.5');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('27', 'the-cuisine-hub', 'Chicken Manchurian', 'Spicy Indo-Chinese chicken in red sauce.', '0.05', NULL, 't', '4.3');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('28', 'the-cuisine-hub', 'Sweet and Sour Prawns', 'Prawns in sweet and tangy sauce.', '0.1', NULL, 't', '4.6');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('30', 'the-cuisine-hub', 'Fuchka Platter', 'Crispy fuchka with spiced tamarind filling.', NULL, NULL, 't', '4.7');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('1', 'segreto', 'Chicken Alfredo Pasta', 'Creamy Alfredo pasta with grilled chicken and herbs.', '0.1', '', 't', '4.5');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('2', 'segreto', 'Classic Margherita Pizza', 'Stone-baked pizza with tomato, mozzarella, and basil.', '0.15', '', 't', '4.7');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('4', 'segreto', 'Garlic Breadsticks', 'Toasted breadsticks with garlic butter and herbs.', '0.05', NULL, 'f', '4.2');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('5', 'segreto', 'Mushroom Risotto', 'Creamy risotto with sautéed mushrooms and parmesan.', NULL, NULL, 'f', '4.6');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('7', 'sugar-crush-and-co', 'Rainbow Donuts', 'Colorful donuts with fruity glaze and sprinkles.', '0.05', NULL, 'f', '4.4');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('13', 'the-nest', 'Cold Coffee', 'Chilled coffee with milk and ice cream.', '0.15', NULL, 'f', '4.3');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('17', 'seasons-restaurant-and-cafe', 'Beef Steak', 'Grilled beef steak with mashed potatoes.', '0.15', NULL, 'f', '4.6');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('21', 'the-tehari-ghar-banani', 'Beef Tehari', 'Authentic Dhakaiya beef tehari with fragrant rice.', '0.1', NULL, 'f', '4.8');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('25', 'the-tehari-ghar-banani', 'Borhani', 'Spiced yogurt drink served with meals.', NULL, NULL, 'f', '4.6');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('29', 'the-cuisine-hub', 'Vegetable Chow Mein', 'Stir-fried noodles with assorted vegetables.', '0.05', NULL, 'f', '4.2');
+INSERT INTO "dish" ("dish_id", "rest_id", "dish_name", "dish_details", "discount", "photo_url", "available", "rating") VALUES ('3', 'segreto', 'Tiramisu', 'Traditional Italian layered dessert with mascarpone.', '0.2', '', 'f', '4.8');
+
+INSERT INTO "category" ("category_name") VALUES ('Fast Food');
+INSERT INTO "category" ("category_name") VALUES ('Traditional');
+INSERT INTO "category" ("category_name") VALUES ('Chicken');
+INSERT INTO "category" ("category_name") VALUES ('Burger and Wraps');
+INSERT INTO "category" ("category_name") VALUES ('Sandwiches');
+INSERT INTO "category" ("category_name") VALUES ('Chinese');
+INSERT INTO "category" ("category_name") VALUES ('Thai');
+INSERT INTO "category" ("category_name") VALUES ('Italian');
+INSERT INTO "category" ("category_name") VALUES ('Indian');
+INSERT INTO "category" ("category_name") VALUES ('Mexican');
+INSERT INTO "category" ("category_name") VALUES ('Continental');
+INSERT INTO "category" ("category_name") VALUES ('Bangladeshi');
+INSERT INTO "category" ("category_name") VALUES ('Seafood');
+INSERT INTO "category" ("category_name") VALUES ('BBQ and Grills');
+INSERT INTO "category" ("category_name") VALUES ('Sweets and Desserts');
+
+
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('1', 'Italian');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('1', 'Chicken');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('2', 'Italian');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('2', 'Burger and Wraps');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('3', 'Italian');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('3', 'Sweets and Desserts');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('4', 'Fast Food');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('4', 'Continental');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('5', 'Continental');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('5', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('6', 'Sweets and Desserts');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('7', 'Sweets and Desserts');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('8', 'Sweets and Desserts');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('9', 'Sweets and Desserts');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('10', 'Sweets and Desserts');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('11', 'Chicken');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('11', 'Sandwiches');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('12', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('12', 'Fast Food');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('13', 'Fast Food');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('14', 'Burger and Wraps');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('14', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('15', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('16', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('16', 'Continental');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('17', 'BBQ and Grills');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('17', 'Continental');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('18', 'Continental');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('18', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('19', 'Sandwiches');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('19', 'Fast Food');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('20', 'Fast Food');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('21', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('21', 'Bangladeshi');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('22', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('22', 'Chicken');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('23', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('24', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('24', 'Bangladeshi');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('25', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('26', 'Chinese');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('26', 'Chicken');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('27', 'Chinese');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('27', 'Chicken');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('28', 'Chinese');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('28', 'Seafood');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('29', 'Chinese');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('29', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('30', 'Traditional');
+INSERT INTO "dish_category_linker" ("dish_id", "category_name") VALUES ('30', 'Fast Food');

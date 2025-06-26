@@ -8,6 +8,8 @@ const cookieParser = require("cookie-parser")
 const authorizeJWT = require("./authorize.js")
 const dishes = require("./Routes/dishes.js")
 const categories = require("./Routes/categories.js")
+const category = require("./Routes/category.js")
+const Restaurant = require("./Routes/Restaurant.js")
 
 //variables
 const app = express()
@@ -432,6 +434,11 @@ app.get("/api/v1/dishes", dishes)
 
 //get request for categories
 app.get("/api/v1/categories", categories)
+
+//get request for category of particular dish item
+app.get("/api/v1/category/:id", category)
+//get request for a particular restaurant
+app.get("/api/v1/restaurant/:id",Restaurant)
 
 app.listen(process.env.PORT, () => {
   console.log(`server is listening at port: ${process.env.PORT}`)

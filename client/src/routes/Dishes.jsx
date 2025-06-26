@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 import Navbar from "../components/Navbar"
 import YummyDataFetch from "../Api/YummyDataFetch"
 import { useForm } from "react-hook-form"
 import Dish_card from "../components/Dish_card"
+import { YummyContext } from "../contexts/YummyContextProvider"
 
-const Dishes = () => {
+//if we are in a particular restaurant then we willpass the curr_restaurant
+const Dishes = ({ restaurant }) => {
   {
     /*variables */
   }
+  // const [restaurant, setRestaurant] = useState(restaurant)
   const [dishes, setDishes] = useState([])
   const [districts, setDistricts] = useState([])
   const [subdistricts, setSubdistricts] = useState([])
   const [categories, setCategories] = useState([])
+  const { current_dish } = useContext(YummyContext)
   const {
     register,
     handleSubmit,
@@ -86,12 +90,16 @@ const Dishes = () => {
       params.push("category_name")
       values.push(data.category_name)
     }
+    if (restaurant) {
+      params.push("rest_id")
+      values.push(restaurant.rest_id)
+    }
     //now create the address for get request
     let url = "/dishes?"
     for (let i = 0; i < params.length; i++) {
       url += params[i] + "=" + values[i] + "&"
     }
-
+    console.log(restaurant)
     //now create the get request
     try {
       const response = await YummyDataFetch.get(url)
@@ -99,12 +107,12 @@ const Dishes = () => {
       setDishes(response.data.data.dishes)
     } catch (error) {
       if (error.response) {
-        console.error("Response error data: " + error.response.data)
-        console.error("Response error status: " + error.response.status)
+        alert("Response error data: " + error.response.data)
+        alert("Response error status: " + error.response.status)
       } else if (error.request) {
-        console.error("No response recieved: " + error.request)
+        alert("No response recieved: " + error.request)
       } else {
-        console.error("Axios error: " + error.message)
+        alert("Axios error: " + error.message)
       }
     }
   }
@@ -124,7 +132,9 @@ const Dishes = () => {
 
   return (
     <>
-      <Navbar />
+      {/*don't display the navbar when we are in a particular restaurant*/}
+      {!restaurant && <Navbar />}
+
       <div className="container-fluid my-3">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -133,10 +143,14 @@ const Dishes = () => {
           }}
         >
           <div className="row">
-            {/*district*/}
+            {/*district --disabled if there is restaurant*/}
             <div className="col-5">
               <label className="form-label">Select a district</label>
-              <select className="form-select" {...register("dist_name")}>
+              <select
+                disabled={restaurant}
+                className="form-select"
+                {...register("dist_name")}
+              >
                 <option value="">Any</option>
                 {districts.map((district) => {
                   return (
@@ -149,10 +163,14 @@ const Dishes = () => {
             </div>
             {/*district*/}
 
-            {/*subdistrict*/}
+            {/*subdistrict -- disabled if there is a restaurant*/}
             <div className="col-5">
               <label className="form-label">Select a sub district</label>
-              <select className="form-select" {...register("sub_dist_id")}>
+              <select
+                disabled={restaurant}
+                className="form-select"
+                {...register("sub_dist_id")}
+              >
                 <option value="">Any</option>
                 {subdistricts.map((subdistrict) => {
                   return (
@@ -267,6 +285,7 @@ const Dishes = () => {
                   className="form-control"
                   placeholder="Type the dish name"
                   {...register("dish_name")}
+                  defaultValue={current_dish ? current_dish.dish_name : ""}
                 />
                 <button className="btn btn-outline-light" type="submit">
                   <FontAwesomeIcon
@@ -319,7 +338,7 @@ const Dishes = () => {
                 className="col-4 d-flex justify-content-center mb-4"
                 key={dish.dish_id}
               >
-                <Dish_card dish={dish} />
+                <Dish_card dish={dish} restaurant={restaurant} />
               </div>
             )
           })}

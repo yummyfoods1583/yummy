@@ -7,6 +7,7 @@ const YummyContextProvider = ({ children }) => {
   const [districts, setDistricts] = useState([])
   const [currentDistrict, setCurrentDistrict] = useState("")
   const [current_user, setCurrentUser] = useState(null)
+  const [current_dish, setCurrentDish] = useState(null)
 
   return (
     <YummyContext.Provider
@@ -17,6 +18,8 @@ const YummyContextProvider = ({ children }) => {
         setCurrentDistrict,
         current_user,
         setCurrentUser,
+        current_dish,
+        setCurrentDish,
       }}
     >
       {children}
