@@ -3,6 +3,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import { NavLink, Link } from "react-router-dom"
 import UserDropdown from "./UserDropdown"
 import { YummyContext } from "../contexts/YummyContextProvider"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons"
 
 const Navbar = () => {
   //check whether there is a logged in user
@@ -80,6 +82,18 @@ const Navbar = () => {
               <>
                 <span>{current_user.user_id}</span>
                 <UserDropdown />
+              </>
+            )}
+            {current_user && current_user.user_type == "CUS" && (
+              <>
+                <Link to="/cart">
+                  <FontAwesomeIcon
+                    icon={faCartShopping}
+                    size={"lg"}
+                    style={{ cursor: "pointer" }}
+                    className="ms-3"
+                  />
+                </Link>
               </>
             )}
           </div>

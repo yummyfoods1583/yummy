@@ -10,6 +10,18 @@ const dishes = require("./Routes/dishes.js")
 const categories = require("./Routes/categories.js")
 const category = require("./Routes/category.js")
 const Restaurant = require("./Routes/Restaurant.js")
+const dish_sub_category = require("./Routes/dish_sub_category.js")
+const cart_check = require("./Routes/cart_check.js")
+const cart_item = require("./Routes/cart_item.js")
+const createCart = require("./Routes/createCart.js")
+const getCart = require("./Routes/getCart.js")
+const getCartItems = require("./Routes/getCartItems.js")
+const removeCart_item = require("./Routes/removeCart_item.js")
+const removeCart = require("./Routes/removeCart.js")
+const place_order = require("./Routes/place_order.js")
+const cusCurrent_orders = require("./Routes/cusCurrent_orders.js")
+const cusOld_orders = require("./Routes/cusOld_orders.js")
+const getAvailableOrders = require("./Routes/getAvailableOrders.js")
 
 //variables
 const app = express()
@@ -438,8 +450,35 @@ app.get("/api/v1/categories", categories)
 //get request for category of particular dish item
 app.get("/api/v1/category/:id", category)
 //get request for a particular restaurant
-app.get("/api/v1/restaurant/:id",Restaurant)
-
+app.get("/api/v1/restaurant/:id", Restaurant)
+//get request for dish sub categories
+app.get("/api/v1/dish_sub_category/:id", dish_sub_category)
+//get request for checking of existing cart
+app.get("/api/v1/cart_check/:customer_id/:rest_id", authorizeJWT, cart_check)
+// post requets to create a new cart
+app.post("/api/v1/cart", authorizeJWT, createCart)
+//post request to add a new cart_item
+app.post("/api/v1/cart_item", authorizeJWT, cart_item)
+//get the cart of a particular customer
+app.get("/api/v1/cart/:id", authorizeJWT, getCart)
+//get the cart items of a particular cart id
+app.get("/api/v1/cart_item/:id", authorizeJWT, getCartItems)
+//delete a cart_item
+app.delete(
+  "/api/v1/cart_item/:cart_id/:sub_cat_id",
+  authorizeJWT,
+  removeCart_item
+)
+//delete a cart
+app.delete("/api/v1/cart/:cart_id", authorizeJWT, removeCart)
+//placing an order
+app.post("/api/v1/place_order", authorizeJWT, place_order)
+//get customer current orders
+app.get("/api/v1/cusCurrent_orders/:id", authorizeJWT, cusCurrent_orders)
+//get customer old orders
+app.get("/api/v1/cusOld_orders/:id", authorizeJWT, cusOld_orders)
+//get available orders
+app.get("/api/v1/available_orders/:id", authorizeJWT, getAvailableOrders)
 app.listen(process.env.PORT, () => {
   console.log(`server is listening at port: ${process.env.PORT}`)
 })

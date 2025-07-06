@@ -14,6 +14,10 @@ import Restaurants from "./routes/Restaurants.jsx"
 import Profile from "./routes/Profile.jsx"
 import Dishes from "./routes/Dishes.jsx"
 import Restaurant from "./routes/Restaurant.jsx"
+import Cart from "./routes/Cart.jsx"
+import Customer_Orders from "./routes/Customer_Orders.jsx"
+import Rider_Orders from "./routes/Rider_Orders.jsx"
+
 
 const router = createBrowserRouter([
   {
@@ -47,6 +51,18 @@ const router = createBrowserRouter([
   {
     path: "/restaurant/:id",
     element: <Restaurant />,
+  },
+  {
+    path: "/cart",
+    element: <Cart />,
+  },
+  {
+    path: "/customer_orders",
+    element: <Customer_Orders/>,
+  },
+  {
+    path: "/rider_orders",
+    element: <Rider_Orders/>,
   },
 ])
 

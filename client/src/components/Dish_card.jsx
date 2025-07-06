@@ -99,6 +99,12 @@ const Dish_card = ({ dish, restaurant }) => {
                   setCurrentDish(dish)
                   navigate(`/restaurant/${dish.rest_id}`)
                 }}
+                disabled={
+                  !dish.available ||
+                  !localStorage.getItem("yummy_user") ||
+                  JSON.parse(localStorage.getItem("yummy_user")).user_type !=
+                    "CUS"
+                }
               >
                 Order
               </button>
@@ -110,13 +116,29 @@ const Dish_card = ({ dish, restaurant }) => {
                   className="btn btn-primary mt-0 mb-1"
                   data-bs-toggle="modal"
                   data-bs-target={`#add_to_cart_modal_${dish.dish_id}`}
+                  disabled={
+                    !dish.available ||
+                    !localStorage.getItem("yummy_user") ||
+                    JSON.parse(localStorage.getItem("yummy_user")).user_type !=
+                      "CUS"
+                  }
                 >
                   Add to cart
                 </button>
-                <Add_to_cart dish={dish}/>
+                <Add_to_cart dish={dish} />
               </>
             )}
-            <button className="btn btn-success mt-0 mb-1">Review</button>
+            <button
+              className="btn btn-success mt-0 mb-1"
+              disabled={
+                !dish.available ||
+                !localStorage.getItem("yummy_user") ||
+                JSON.parse(localStorage.getItem("yummy_user")).user_type !=
+                  "CUS"
+              }
+            >
+              Review
+            </button>
           </div>
         </div>
         {/*details modal */}

@@ -73,6 +73,48 @@ const UserDropdown = () => {
             Profile
           </Link>
         </li>
+        {/*dropdown items for customers*/}
+        {localStorage.getItem("yummy_user") &&
+          JSON.parse(localStorage.getItem("yummy_user")).user_type ===
+            "CUS" && (
+            <li
+              onClick={() => {
+                navigate("/customer_orders")
+              }}
+            >
+              <span className="dropdown-item" style={{ cursor: "pointer" }}>
+                <span>Orders</span>
+              </span>
+            </li>
+          )}
+        {/*dropdown items for riders*/}
+        {localStorage.getItem("yummy_user") &&
+          JSON.parse(localStorage.getItem("yummy_user")).user_type ===
+            "RID" && (
+            <li
+              onClick={() => {
+                navigate("/rider_orders")
+              }}
+            >
+              <span className="dropdown-item" style={{ cursor: "pointer" }}>
+                <span>Orders</span>
+              </span>
+            </li>
+          )}
+        {/*dropdown items for restaurants*/}
+        {localStorage.getItem("yummy_user") &&
+          JSON.parse(localStorage.getItem("yummy_user")).user_type ===
+            "RES" && (
+            <li
+              onClick={() => {
+                navigate("/restaurant_orders")
+              }}
+            >
+              <span className="dropdown-item" style={{ cursor: "pointer" }}>
+                <span>Orders</span>
+              </span>
+            </li>
+          )}
         <li>
           <hr className="dropdown-divider" />
         </li>

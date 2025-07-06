@@ -41,14 +41,31 @@ const Restaurant = () => {
     const closing_time = new Date(restaurant.closing_time)
     //find closeUntil
     const closeUntil = new Date(restaurant.close_until)
-
+    console.log(closeUntil)
     const tempCurr = currTime.getHours() * 60 + currTime.getMinutes()
     const tempOpen = opening_time.getHours() * 60 + opening_time.getMinutes()
     const tempClose = closing_time.getHours() * 60 + closing_time.getMinutes()
     //variable to check whether the restaurant is open or not
-    let isOpen =
-      tempCurr >= tempOpen && tempCurr <= tempClose && currTime >= closeUntil
+    // Handle the case where closing time is midnight (0:00) or crosses midnight
+    let isOpen
+    if (tempClose === 0) {
+      // When closing at midnight, check if current time is after opening time
+      // and before midnight (1440 minutes = 24 hours)
+      isOpen = tempCurr >= tempOpen && tempCurr < 1440
+    } else if (tempClose < tempOpen) {
+      // When closing time is before opening time (crosses midnight)
+      isOpen = tempCurr >= tempOpen || tempCurr < tempClose
+    } else {
+      // Normal case (same day opening/closing)
+      isOpen = tempCurr >= tempOpen && tempCurr < tempClose
+    }
 
+    // Also check if we're past any temporary closure time
+    if (closeUntil) {
+      const tempCloseUntil =
+        closeUntil.getHours() * 60 + closeUntil.getMinutes()
+      isOpen = isOpen && tempCurr >= tempCloseUntil
+    }
     return (
       <>
         {!restaurant && <div>Loading</div>}

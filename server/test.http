@@ -42,4 +42,24 @@
 #     "details":"ruhan43@gmail.com"
 # }
 
-GET http://localhost:3000/api/v1/restaurant/the-cuisine-hub
+# GET http://localhost:3000/api/v1/category/6
+# GET http://localhost:3000/api/v1/dish_sub_category/1
+
+# POST http://localhost:3000/api/v1/cart_item
+# Content-Type: application/json
+
+# {
+#     "cart_id":"3",
+#     "sub_cat_id":"93",
+#     "quantity":"10",
+#     "order_specification":null
+# }
+
+# POST  http://localhost:3000/api/v1/cart 
+# Content-Type: application/json
+
+# {
+#     "customer_id":"shoyaib",
+#     "rest_id":"segreto"
+# }
+GET http://localhost:3000/api/v1/cart/shoyaib

@@ -8,19 +8,50 @@ const Restaurant_Card = ({ restaurant }) => {
     restaurant.photo_url = "/Images/No_Image.jpg"
   //fetch opening and closing time
   let temp = new Date(restaurant.opening_time)
-  //calculate opening time as the minutes past midnigh
   const opening_time = temp.getHours() * 60 + temp.getMinutes()
   const opening_hr = temp.getHours()
   const opening_min = temp.getMinutes()
+
   temp = new Date(restaurant.closing_time)
   const closing_time = temp.getHours() * 60 + temp.getMinutes()
+
   temp = new Date()
   const current_time = temp.getHours() * 60 + temp.getMinutes()
-  const close_until =
-    restaurant.close_until === null ? null : new Date(restaurant.close_until)
+  const close_until = restaurant.close_until
+    ? new Date(restaurant.close_until)
+    : null
+
+  // Improved isOpen calculation
+  let isOpen = false
+  if (close_until) {
+    const tempCloseUntil =
+      close_until.getHours() * 60 + close_until.getMinutes()
+    // Only consider opening if past the closure time
+    if (current_time >= tempCloseUntil) {
+      if (closing_time === 0) {
+        isOpen = current_time >= opening_time
+      } else if (closing_time < opening_time) {
+        isOpen = current_time >= opening_time || current_time < closing_time
+      } else {
+        isOpen = current_time >= opening_time && current_time < closing_time
+      }
+    }
+  } else {
+    // No temporary closure, just check regular hours
+    if (closing_time === 0) {
+      isOpen = current_time >= opening_time
+    } else if (closing_time < opening_time) {
+      isOpen = current_time >= opening_time || current_time < closing_time
+    } else {
+      isOpen = current_time >= opening_time && current_time < closing_time
+    }
+  }
   return (
     <>
-      <Link to={`/restaurant/${restaurant.rest_id}`} className="text-decoration-none">
+      <Link
+        to={`/restaurant/${restaurant.rest_id}`}
+        className="text-decoration-none"
+      >
         <div
           className="card shadow-lg transition-transform"
           style={{
@@ -53,21 +84,19 @@ const Restaurant_Card = ({ restaurant }) => {
             <p className="card-text">{restaurant.detailed_address}</p>
           </div>
           {/*Display Closing time*/}
-          {close_until === null &&
-            current_time < opening_time &&
-            current_time > closing_time && (
-              <div
-                className="Container-fluid bg-black position-absolute bg-opacity-75 d-flex justify-content-center align-items-center fw-bold fs-5"
-                style={{ width: "400px", height: "225px" }}
-              >
-                {
-                  <span className="text-white">
-                    Close Until:{"\t"} {opening_hr.toString().padStart(2, "0")}:
-                    {opening_min.toString().padStart(2, "0")}
-                  </span>
-                }
-              </div>
-            )}
+          {close_until === null && !isOpen && (
+            <div
+              className="Container-fluid bg-black position-absolute bg-opacity-75 d-flex justify-content-center align-items-center fw-bold fs-5"
+              style={{ width: "400px", height: "225px" }}
+            >
+              {
+                <span className="text-white">
+                  Close Until:{"\t"} {opening_hr.toString().padStart(2, "0")}:
+                  {opening_min.toString().padStart(2, "0")}
+                </span>
+              }
+            </div>
+          )}
 
           {/*Display Close Until*/}
           {close_until !== null && close_until > new Date() && (
