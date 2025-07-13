@@ -62,4 +62,12 @@
 #     "customer_id":"shoyaib",
 #     "rest_id":"segreto"
 # }
-GET http://localhost:3000/api/v1/cart/shoyaib
+POST http://localhost:3000/api/v1/dish_review
+Content-Type: application/json
+
+{
+    "customer_id": "shoyaib",
+    "dish_id":6,
+    "review_text" :"Hey",
+    "rating":5
+}

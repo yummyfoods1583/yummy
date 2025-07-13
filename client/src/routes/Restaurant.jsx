@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import YummyDataFetch from "../Api/YummyDataFetch"
 import Restaurant_Details from "../components/Modal/Restaurant_Details"
 import Dishes from "./Dishes"
 import Navbar from "../components/Navbar"
 
 const Restaurant = () => {
+  //navigator
+  const navigate = useNavigate()
   const [restaurant, setRestaurant] = useState(null)
   const param = useParams()
   //fetch the restaurant
@@ -109,7 +111,19 @@ const Restaurant = () => {
                     Details
                   </button>
                   <Restaurant_Details restaurant={restaurant} />
-                  <button className="btn btn-info">Review</button>
+                  <button
+                    className="btn btn-info"
+                    disabled={
+                      !localStorage.getItem("yummy_user") ||
+                      JSON.parse(localStorage.getItem("yummy_user"))
+                        .user_type != "CUS"
+                    }
+                    onClick={() => {
+                      navigate(`/restaurant_review/${restaurant.rest_id}`)
+                    }}
+                  >
+                    Review
+                  </button>
                 </div>
               </div>
             </div>

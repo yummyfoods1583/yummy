@@ -1,9 +1,9 @@
 const db = require("../Api")
-//available_orders/:id=> rider_id
-const getAvailableOrders = async (req, res) => {
+//restaurant_available_orders/:id=> rest_id
+const getRestaurantAvailableOrders = async (req, res) => {
   try {
     const result = await db.query(
-      "select o.*,c.*,u.name from order_ o join cart c on(o.order_id=c.cart_id) join users u on(u.user_id=c.rest_id) where o.sub_dist_id=(select curr_sub_dist from rider where rider_id=$1) and o.order_status='PENDING' and o.delivery_method='HOME-DELIVERY'",
+      "select o.*,c.*,u.name from order_ o join cart c on(o.order_id=c.cart_id) join users u on(u.user_id=c.rest_id) where c.rest_id=$1 and o.order_status='PENDING'",
       [req.params.id]
     )
     console.log(result.rows)
@@ -22,4 +22,4 @@ const getAvailableOrders = async (req, res) => {
       console.log(error)
   }
 }
-module.exports = getAvailableOrders
+module.exports = getRestaurantAvailableOrders

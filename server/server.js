@@ -22,6 +22,12 @@ const place_order = require("./Routes/place_order.js")
 const cusCurrent_orders = require("./Routes/cusCurrent_orders.js")
 const cusOld_orders = require("./Routes/cusOld_orders.js")
 const getAvailableOrders = require("./Routes/getAvailableOrders.js")
+const getRating = require("./Routes/getRating.js")
+const getReview = require("./Routes/getReviews.js")
+const getDish = require("./Routes/getDish.js")
+const restaurant_review = require("./Routes/restaurant_review.js")
+const dish_review = require("./Routes/dish_review.js")
+const getRestaurantAvailableOrders = require("./Routes/getRestaurantAvailableOrders.js")
 
 //variables
 const app = express()
@@ -479,6 +485,18 @@ app.get("/api/v1/cusCurrent_orders/:id", authorizeJWT, cusCurrent_orders)
 app.get("/api/v1/cusOld_orders/:id", authorizeJWT, cusOld_orders)
 //get available orders
 app.get("/api/v1/available_orders/:id", authorizeJWT, getAvailableOrders)
+//get rating
+app.get("/api/v1/rating", getRating)
+//get review
+app.get("/api/v1/reviews", getReview)
+//get dish
+app.get("/api/v1/dish/:dish_id", getDish)
+//restaurant review
+app.post("/api/v1/restaurant_review", authorizeJWT, restaurant_review)
+//dish review
+app.post("/api/v1/dish_review",authorizeJWT, dish_review)
+//get restaurant available orders
+app.get("/api/v1/restaurant_available_orders/:id",authorizeJWT, getRestaurantAvailableOrders)
 app.listen(process.env.PORT, () => {
   console.log(`server is listening at port: ${process.env.PORT}`)
 })

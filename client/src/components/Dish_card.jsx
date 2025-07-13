@@ -55,6 +55,27 @@ const Dish_card = ({ dish, restaurant }) => {
   }
   category_str += categories[categories.length - 1]
 
+  //fetch the rating
+  const [rating, setRating] = useState(null)
+  const fetchRating = async () => {
+    try {
+      const response = await YummyDataFetch.get(
+        `/rating/?dish_id=${dish.dish_id}`
+      )
+      setRating(response.data.data)
+    } catch (error) {
+      alert("Failed to fetch rating:", error)
+
+      // Optional: show a message to the user
+      setRating(null) // or fallback to default value
+      // You can also use toast or alert here if needed
+    }
+  }
+
+  useEffect(() => {
+    fetchRating()
+  }, [])
+
   return (
     <>
       <div
@@ -75,8 +96,12 @@ const Dish_card = ({ dish, restaurant }) => {
             <p className="card-title fs-5 fw-bold">{dish.dish_name}</p>
             <div>
               <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-              <span className="ms-1 fw-bold">{dish.rating}</span>
-              <span className="ms-1">({dish.review_count})</span>
+              <span className="ms-1 fw-bold">
+                {rating?.rating != null
+                  ? Number(rating.rating).toFixed(1)
+                  : "N/A"}
+              </span>
+              <span className="ms-1">({rating?.review_count ?? 0})</span>
             </div>
           </div>
           <hr />
@@ -136,6 +161,9 @@ const Dish_card = ({ dish, restaurant }) => {
                 JSON.parse(localStorage.getItem("yummy_user")).user_type !=
                   "CUS"
               }
+              onClick={() => {
+                navigate(`/dish_review/${dish.dish_id}`)
+              }}
             >
               Review
             </button>

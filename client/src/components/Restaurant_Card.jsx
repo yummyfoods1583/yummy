@@ -1,11 +1,32 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faStar } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "react-router-dom"
+import YummyDataFetch from "../Api/YummyDataFetch"
 
 const Restaurant_Card = ({ restaurant }) => {
   if (restaurant.photo_url === null || restaurant.photo_url === "")
     restaurant.photo_url = "/Images/No_Image.jpg"
+  //fetch the rating
+  const [rating, setRating] = useState(null)
+  const fetchRating = async () => {
+    try {
+      const response = await YummyDataFetch.get(
+        `/rating/?rest_id=${restaurant.rest_id}`
+      )
+      setRating(response.data.data)
+    } catch (error) {
+      alert("Failed to fetch rating:", error)
+
+      // Optional: show a message to the user
+      setRating(null) // or fallback to default value
+      // You can also use toast or alert here if needed
+    }
+  }
+
+  useEffect(() => {
+    fetchRating()
+  }, [])
   //fetch opening and closing time
   let temp = new Date(restaurant.opening_time)
   const opening_time = temp.getHours() * 60 + temp.getMinutes()
@@ -75,8 +96,14 @@ const Restaurant_Card = ({ restaurant }) => {
               <p className="card-title fs-5">{restaurant.name}</p>
               <div>
                 <FontAwesomeIcon icon={faStar} style={{ color: "#FFD43B" }} />
-                <span className="ms-1 fw-bold">{restaurant.rating}</span>
-                <span className="ms-1">({restaurant.review_count})</span>
+                <span className="ms-1 fw-bold">
+                  {rating?.rating != null
+                    ? Number(rating.rating).toFixed(1)
+                    : "N/A"}
+                </span>
+                <span className="ms-1">
+                  ({rating?.review_count != null ? rating.review_count : 0})
+                </span>
               </div>
             </div>
 

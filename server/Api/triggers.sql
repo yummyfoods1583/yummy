@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION multi_cart_handle()
 RETURNS TRIGGER AS $$
---trigger to delete other existing cart of a customer before inserting new one  
+--trigger to delete other existing active cart of a customer before inserting new one  
 DECLARE
   r RECORD;
 BEGIN
@@ -22,7 +22,7 @@ EXECUTE FUNCTION multi_cart_handle();
 
 CREATE OR REPLACE FUNCTION multi_cart_item_handle_func()
 RETURNS TRIGGER AS $$
---trigger to delete other existing cart of a customer before inserting new one  
+--trigger to delete other existing cart_items of a customer before inserting new one  
 BEGIN
   DELETE FROM cart_item 
   WHERE cart_id = NEW.cart_id 
@@ -36,6 +36,7 @@ BEFORE INSERT ON cart_item
 FOR EACH ROW
 EXECUTE FUNCTION multi_cart_item_handle_func();
 
+--trigger to place denote a  cart as completed to before inserting it as an order new one  
 CREATE OR REPLACE FUNCTION handle_order_trigger()
 RETURNS TRIGGER AS $$
 BEGIN
